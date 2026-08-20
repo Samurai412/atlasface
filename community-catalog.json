@@ -1,0 +1,163 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-06",
+  "items": [
+    {
+      "id": "spanish-basics-vocab",
+      "type": "topic",
+      "name": "Spanish Basics Vocabulary",
+      "description": "Essential Spanish vocabulary for beginners. Covers greetings, numbers, colors, and common phrases.",
+      "author": "atlasface",
+      "authorUrl": "https://github.com/Samurai412",
+      "category": "languages",
+      "tags": [
+        "spanish",
+        "vocabulary",
+        "beginner",
+        "flashcards"
+      ],
+      "cardCount": 50,
+      "version": "1.0.0",
+      "downloads": 0,
+      "rating": 0,
+      "packageUrl": "https://raw.githubusercontent.com/Resistance-Labs-Tech/atlasface-community/main/content/spanish-basics-vocab.json",
+      "previewUrl": null,
+      "createdAt": "2026-04-06",
+      "updatedAt": "2026-04-06"
+    },
+    {
+      "id": "biology-cell-structure",
+      "type": "topic",
+      "name": "Cell Biology Fundamentals",
+      "description": "Comprehensive study material on cell structure, organelles, and cellular processes.",
+      "author": "atlasface",
+      "authorUrl": "https://github.com/Samurai412",
+      "category": "science",
+      "tags": [
+        "biology",
+        "cells",
+        "science",
+        "high-school"
+      ],
+      "cardCount": 35,
+      "version": "1.0.0",
+      "downloads": 0,
+      "rating": 0,
+      "packageUrl": "https://raw.githubusercontent.com/Resistance-Labs-Tech/atlasface-community/main/content/biology-cell-structure.json",
+      "previewUrl": null,
+      "createdAt": "2026-04-06",
+      "updatedAt": "2026-04-06"
+    },
+    {
+      "id": "javascript-fundamentals",
+      "type": "project",
+      "name": "JavaScript Fundamentals",
+      "description": "Complete JavaScript learning project with topics on variables, functions, arrays, objects, and async programming.",
+      "author": "atlasface",
+      "authorUrl": "https://github.com/Samurai412",
+      "category": "programming",
+      "tags": [
+        "javascript",
+        "programming",
+        "web-dev",
+        "beginner"
+      ],
+      "cardCount": 120,
+      "version": "1.0.0",
+      "downloads": 0,
+      "rating": 0,
+      "packageUrl": "https://raw.githubusercontent.com/Resistance-Labs-Tech/atlasface-community/main/content/javascript-fundamentals.json",
+      "previewUrl": null,
+      "createdAt": "2026-04-06",
+      "updatedAt": "2026-04-06"
+    },
+    {
+      "id": "samurai-math2",
+      "type": "vault",
+      "name": "math2",
+      "description": "math",
+      "author": "Samurai",
+      "authorUrl": "https://github.com/Samurai",
+      "category": "math",
+      "tags": [
+        "math",
+        "linalg"
+      ],
+      "cardCount": 5,
+      "version": "1.0.0",
+      "downloads": 0,
+      "rating": 0,
+      "packageUrl": "https://raw.githubusercontent.com/Resistance-Labs-Tech/atlasface-community/main/content/samurai-math2.json",
+      "previewUrl": null,
+      "createdAt": "2026-04-06",
+      "updatedAt": "2026-04-06"
+    },
+    {
+      "id": "tset-teste",
+      "type": "topic",
+      "name": "teste",
+      "description": "test",
+      "author": "tset",
+      "authorUrl": "https://github.com/tset",
+      "category": "other",
+      "tags": [
+        "test"
+      ],
+      "cardCount": 7,
+      "version": "1.0.0",
+      "downloads": 0,
+      "rating": 0,
+      "packageUrl": "https://raw.githubusercontent.com/Samurai412/atlasface-community/main/content/tset-teste.json",
+      "previewUrl": null,
+      "createdAt": "2026-04-06",
+      "updatedAt": "2026-04-06"
+    }
+  ],
+  "categories": [
+    {
+      "id": "languages",
+      "name": "Languages",
+      "icon": "🌍"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "icon": "🔬"
+    },
+    {
+      "id": "programming",
+      "name": "Programming",
+      "icon": "💻"
+    },
+    {
+      "id": "math",
+      "name": "Mathematics",
+      "icon": "📐"
+    },
+    {
+      "id": "history",
+      "name": "History",
+      "icon": "📜"
+    },
+    {
+      "id": "arts",
+      "name": "Arts & Music",
+      "icon": "🎨"
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "icon": "💼"
+    },
+    {
+      "id": "health",
+      "name": "Health & Medicine",
+      "icon": "🏥"
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "icon": "📦"
+    }
+  ]
+}
