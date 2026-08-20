@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community Marketplace · ATLAS:Face</title>
+    <meta name="description" content="Discover, preview, and install community study decks, spatial vaults, and custom plugins for ATLAS:Face.">
+    <meta name="theme-color" content="#08090c" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="./assets/marketplace-tLrKFSY3.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/style-CkO2D64t.js">
+    <link rel="stylesheet" crossorigin href="./assets/style-DF3lk-cs.css">
+    <link rel="stylesheet" crossorigin href="./assets/marketplace-DZaJ-b9q.css">
+  </head>
+  <body>
+    <!-- App Noise SVG Texture -->
+    <svg class="grain-svg" viewBox="0 0 400 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="1.25" numOctaves="2" seed="23" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+        <feComponentTransfer>
+          <feFuncR type="discrete" tableValues=".32 .46 .58 .7 .82 1"/>
+          <feFuncG type="discrete" tableValues=".32 .46 .58 .7 .82 1"/>
+          <feFuncB type="discrete" tableValues=".32 .46 .58 .7 .82 1"/>
+          <feFuncA type="table" tableValues="0 .68"/>
+        </feComponentTransfer>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+    </svg>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="logo">
+          <img src="final.webp" alt="ATLAS:Face Logo" width="28" height="28" decoding="async" />
+          <span class="logo-text">ATLAS<span class="logo-accent">:Face</span></span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html#features" class="nav-link">Features</a>
+          <a href="index.html#capabilities" class="nav-link">Capabilities</a>
+          <a href="marketplace.html" class="nav-link" style="color: var(--mp-accent); font-weight: 600;">Marketplace</a>
+          <a href="docs.html" class="nav-link">Docs</a>
+          <a href="index.html#download" class="btn-primary btn-nav">Download App</a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main-content" class="mp-container">
+      <!-- Hero Section -->
+      <section class="mp-hero">
+        <div class="mp-eyebrow">
+          <span>Community Knowledge Hub</span>
+        </div>
+        <h1 class="mp-title">
+          Curated Decks, Spatial Vaults,<br />
+          <span class="gradient-text">&amp; Community Plugins.</span>
+        </h1>
+        <p class="mp-subtitle">
+          Explore community-crafted flashcard decks, high-yield study vaults, and powerful workflow tools. Preview cards live in your browser or install into ATLAS:Face in one click.
+        </p>
+
+        <div class="mp-hero-actions">
+          <button id="btn-open-publish" class="btn-mp-publish">
+            <span>Publish to Community</span>
+          </button>
+          <a href="index.html#download" class="btn-mp-secondary">
+            <span>Get ATLAS:Face Desktop</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Filter and Search Controls -->
+      <section class="mp-controls">
+        <div class="mp-search-bar">
+          <span class="mp-search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="mp-search" class="mp-search-input" placeholder="Search decks, topics, tags, authors, or plugins..." />
+        </div>
+
+        <div class="mp-filter-chips">
+          <button class="mp-chip active" data-category="all">All Content</button>
+          <button class="mp-chip" data-category="featured">Featured</button>
+          <button class="mp-chip" data-category="languages">Languages</button>
+          <button class="mp-chip" data-category="science">Science &amp; Bio</button>
+          <button class="mp-chip" data-category="programming">Programming</button>
+          <button class="mp-chip" data-category="medicine">Medicine</button>
+          <button class="mp-chip" data-category="history">History</button>
+          <button class="mp-chip" data-category="plugins">Plugins &amp; Tools</button>
+        </div>
+      </section>
+
+      <!-- Marketplace Cards Grid -->
+      <section id="mp-grid" class="mp-grid">
+        <!-- Rendered dynamically by marketplace.js -->
+      </section>
+    </main>
+
+    <!-- 3D Interactive Card Preview Modal -->
+    <div id="preview-modal-overlay" class="mp-modal-overlay">
+      <div class="mp-modal" role="dialog" aria-label="Deck Preview">
+        <button id="preview-modal-close" class="mp-modal-close" title="Close preview">✕</button>
+        
+        <div style="margin-bottom: 1rem;">
+          <span class="mp-eyebrow" style="margin-bottom: 0.5rem; font-size: 0.7rem;">Interactive Preview</span>
+          <h2 id="preview-deck-title" style="font-family: 'Sora', sans-serif; font-size: 1.4rem; color: #fff; margin-bottom: 0.2rem;">Spanish Essentials</h2>
+          <span id="preview-deck-author" style="font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: var(--mp-text-secondary);">by Elena Rostova</span>
+        </div>
+
+        <!-- 3D Flashcard Stage -->
+        <div id="flashcard-stage" class="mp-flashcard-stage" title="Click card to flip">
+          <div class="mp-flashcard-inner">
+            <!-- Front Face -->
+            <div class="mp-card-face front">
+              <span class="mp-card-side-label">Front (Question / Prompt)</span>
+              <p id="card-front-text" class="mp-card-prompt">¿Cómo te llamas?</p>
+              <span class="mp-card-flip-hint">Click card to flip</span>
+            </div>
+            <!-- Back Face -->
+            <div class="mp-card-face back">
+              <span class="mp-card-side-label" style="color: var(--mp-accent);">Back (Answer / Recall)</span>
+              <p id="card-back-text" class="mp-card-prompt" style="color: #38bdf8;">What is your name? (Informal)</p>
+              <span class="mp-card-flip-hint">Click to flip back</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Nav Controls -->
+        <div class="mp-preview-controls">
+          <button id="prev-card-btn" class="mp-preview-nav-btn">← Previous</button>
+          <span id="card-progress-indicator" class="mp-preview-indicator">Card 1 of 5</span>
+          <button id="next-card-btn" class="mp-preview-nav-btn">Next →</button>
+        </div>
+
+        <!-- Direct Install Call to Action -->
+        <div style="margin-top: 1.75rem; padding-top: 1rem; border-top: 1px solid var(--mp-border); text-align: center;">
+          <a id="preview-install-btn" href="atlasface://marketplace/install" class="btn-mp-publish" style="width: 100%; justify-content: center; text-decoration: none;">
+            <span>Install Full Deck in ATLAS:Face</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Web Publish Modal -->
+    <div id="publish-modal-overlay" class="mp-modal-overlay">
+      <div class="mp-modal" role="dialog" aria-label="Publish to Community">
+        <button id="publish-modal-close" class="mp-modal-close" title="Close modal">✕</button>
+
+        <div style="margin-bottom: 1.25rem;">
+          <h2 style="font-family: 'Sora', sans-serif; font-size: 1.4rem; color: #fff; margin-bottom: 0.35rem;">Publish to Community</h2>
+          <p style="font-family: 'Manrope', sans-serif; font-size: 0.9rem; color: var(--mp-text-secondary);">
+            Share your flashcard decks, topics, or study vaults with the worldwide ATLAS:Face community.
+          </p>
+        </div>
+
+        <!-- File Upload Dropzone -->
+        <div id="publish-dropzone" class="mp-dropzone">
+          <input type="file" id="publish-file-input" accept=".json,.atlasdeck" style="display: none;" />
+          <div style="margin-bottom: 0.75rem; color: var(--mp-accent);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+          </div>
+          <div id="dropzone-text">
+            <strong>Drag &amp; drop your .atlasdeck or JSON file here</strong><br />
+            <span style="color: var(--mp-text-muted); font-size: 0.8rem;">or click to browse files from your computer</span>
+          </div>
+        </div>
+
+        <!-- Metadata Form -->
+        <div class="mp-form-group">
+          <label class="mp-form-label">Deck / Topic Title *</label>
+          <input type="text" id="publish-name" class="mp-form-input" placeholder="e.g., Medical Pharmacology - Antibiotics" />
+        </div>
+
+        <div class="mp-form-group">
+          <label class="mp-form-label">Description</label>
+          <textarea id="publish-desc" class="mp-form-textarea" rows="2" placeholder="Summary of topics, units, or key concepts covered..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="mp-form-group">
+            <label class="mp-form-label">Category</label>
+            <select id="publish-category" class="mp-form-select">
+              <option value="languages">Languages</option>
+              <option value="science">Science</option>
+              <option value="programming">Programming</option>
+              <option value="medicine">Medicine</option>
+              <option value="history">History</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="mp-form-group">
+            <label class="mp-form-label">Author Name</label>
+            <input type="text" id="publish-author" class="mp-form-input" placeholder="Your Name or Nickname" />
+          </div>
+        </div>
+
+        <div class="mp-form-group">
+          <label class="mp-form-label">Tags (comma-separated)</label>
+          <input type="text" id="publish-tags" class="mp-form-input" placeholder="biology, cells, ap, exam" />
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button id="publish-cancel-btn" class="btn-mp-secondary">Cancel</button>
+          <button id="publish-submit-btn" class="btn-mp-publish">Publish to Community</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+  </body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ATLAS:Face Docs — Complete Product & Developer Manual</title>
+    <meta name="description" content="A comprehensive guide to ATLAS:Face: sources, cards, markdown, CLI, routines, widgets, publishing, plugins, AI tools, and local-first data architecture." />
+    <link rel="canonical" href="https://atlasface.resistancelabs.tech/docs.html" />
+    <meta name="theme-color" content="#08090c" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="ATLAS:Face" />
+    <meta property="og:url" content="https://atlasface.resistancelabs.tech/docs.html" />
+    <meta property="og:title" content="ATLAS:Face Docs — Complete Product & Developer Manual" />
+    <meta property="og:description" content="Sources, cards, markdown, CLI, routines, widgets, publishing, plugins, AI tools, and local-first data architecture in one guide." />
+    <meta property="og:image" content="https://atlasface.resistancelabs.tech/journal.png" />
+    <meta property="og:image:secure_url" content="https://atlasface.resistancelabs.tech/journal.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1920" />
+    <meta property="og:image:height" content="1041" />
+    <meta property="og:image:alt" content="ATLAS:Face knowledge workspace" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ATLAS:Face Docs — Complete Product & Developer Manual" />
+    <meta name="twitter:description" content="A detailed guide to the ATLAS:Face knowledge system." />
+    <meta name="twitter:image" content="https://atlasface.resistancelabs.tech/journal.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="./assets/style-CkO2D64t.js"></script>
+    <script type="module" crossorigin src="./assets/downloads-C6QAMyeP.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/style-DF3lk-cs.css">
+  </head>
+  <body class="docs-body">
+    <!-- App Noise SVG Texture -->
+    <svg class="grain-svg" viewBox="0 0 400 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="1.25" numOctaves="2" seed="23" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+        <feComponentTransfer>
+          <feFuncR type="discrete" tableValues=".32 .46 .58 .7 .82 1"/>
+          <feFuncG type="discrete" tableValues=".32 .46 .58 .7 .82 1"/>
+          <feFuncB type="discrete" tableValues=".32 .46 .58 .7 .82 1"/>
+          <feFuncA type="table" tableValues="0 .68"/>
+        </feComponentTransfer>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+    </svg>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar docs-navbar scrolled">
+      <div class="nav-container">
+        <a href="index.html" class="logo">
+          <img src="final.webp" alt="ATLAS:Face Logo" width="28" height="28" decoding="async" />
+          <span class="logo-text">ATLAS<span class="logo-accent">:Face</span></span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="index.html#features" class="nav-link">Features</a>
+          <a href="index.html#capabilities" class="nav-link">Capabilities</a>
+          <a href="docs.html" class="nav-link active">Docs</a>
+          <a href="#download-options" class="btn-primary btn-nav">Get App</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="docs-shell">
+      <header class="docs-hero">
+        <div class="docs-kicker">Product Manual &amp; Reference</div>
+        <h1>Everything ATLAS:Face can do.</h1>
+        <p class="docs-hero-lead">
+          ATLAS:Face is a local-first knowledge system for readers, builders, researchers, autodidacts, and creators who return to difficult ideas. This manual documents the entire surface: the CLI, markdown schema, widgets, routines, publishing, plugins, AI workbench tools, and the way sources convert into cards, notes, maps, and spaced-repetition review loops.
+        </p>
+        <div class="docs-hero-actions">
+          <a href="#download-options" class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download Desktop App</span>
+          </a>
+          <a href="#cli" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            <span>Explore the CLI</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="docs-layout">
+        <aside class="docs-toc" aria-label="Docs table of contents">
+          <div class="docs-toc-header">Documentation Index</div>
+          <a href="#model">Mental model</a>
+          <a href="#sources">Sources &amp; Readers</a>
+          <a href="#cards">Cards &amp; Recall</a>
+          <a href="#markdown">Markdown System</a>
+          <a href="#journals">Journals &amp; Widgets</a>
+          <a href="#planning">Routines &amp; Planning</a>
+          <a href="#maps">Maps &amp; Canvas</a>
+          <a href="#ai">AI Workbench</a>
+          <a href="#publishing">Publishing</a>
+          <a href="#marketplaces">Marketplaces</a>
+          <a href="#cli">CLI Reference</a>
+          <a href="#plugins">Plugins SDK</a>
+          <a href="#settings">Settings &amp; Profiles</a>
+          <a href="#download-options">Download Options</a>
+        </aside>
+
+        <article class="docs-content">
+          <!-- 1. Mental Model -->
+          <section id="model" class="docs-section">
+            <p class="section-eyebrow">Architecture</p>
+            <h2>A local-first knowledge system, not one more note pile.</h2>
+            <p>ATLAS:Face organizes your work as an intuitive, filesystem-backed hierarchy: <strong>Vaults</strong> contain <strong>Projects</strong>, projects contain <strong>Topics</strong>, and topics contain markdown documents, cards, media resources, links, review metadata, layout metadata, and source progress.</p>
+            <div class="docs-grid two-col">
+              <div>
+                <h3>Core Objects</h3>
+                <ul>
+                  <li><strong>Vaults</strong> are top-level folders for an entire body of knowledge or client domain.</li>
+                  <li><strong>Projects</strong> group a course, research path, topic domain, or creative endeavor.</li>
+                  <li><strong>Topics</strong> are the main working unit. A topic can be a markdown document, a card set, a source session, or all of them at once.</li>
+                  <li><strong>Cards</strong> are interactive knowledge blocks with titles, content, SRS state, links, and code blocks.</li>
+                  <li><strong>Resources</strong> attach PDFs, EPUBs, and videos directly to the topics they inform.</li>
+                </ul>
+              </div>
+              <div>
+                <h3>How It Feels in Practice</h3>
+                <p>Start with a raw PDF source, a curious question, or a blank topic. Read or watch inside ATLAS:Face, extract what matters into cards and notes, connect related ideas on a spatial canvas, review them via spaced repetition, and publish clean versions when they are ready to share.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. Sources -->
+          <section id="sources" class="docs-section">
+            <p class="section-eyebrow">Sources</p>
+            <h2>PDFs, EPUBs, and YouTube videos become active working material.</h2>
+            <p>The Resources panel is the starting point for source-first study. It manages PDFs, EPUB books, and video resources so your reading progress, annotations, extracted cards, and comprehension checks stay anchored to the topic instead of fragmented across external apps.</p>
+            <div class="docs-grid three-col">
+              <div>
+                <h3>PDF Reader</h3>
+                <p>Open and annotate PDF documents, track page progress, draw with pens, search text, and keep notes connected to the source.</p>
+              </div>
+              <div>
+                <h3>EPUB Reader</h3>
+                <p>Read EPUB books with chapter navigation and inline card creation. The reader uses focused excerpts around your current location for targeted quiz generation.</p>
+              </div>
+              <div>
+                <h3>YouTube Player</h3>
+                <p>Study videos with transcript-aware AI tools. Generate timestamped questions, keep notes beside playback, and turn lectures into reviewable card decks.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Cards -->
+          <section id="cards" class="docs-section">
+            <p class="section-eyebrow">Cards &amp; Recall</p>
+            <h2>Cards are movable, linkable units of understanding.</h2>
+            <p>ATLAS:Face cards are much more than simple flashcards. They can be arranged on a spatial canvas, edited in place, linked with typed relationships, turned into spaced repetition review decks, presented in full-screen slideshows, and exported as standard markdown.</p>
+            <div class="docs-list">
+              <div><strong>Card View</strong><span>Work with cards as interactive blocks inside a topic. Edit title and body, format code, move them spatially, and keep surrounding context visible.</span></div>
+              <div><strong>Spaced Repetition Review</strong><span>Review due cards, rate difficulty from Again to Easy, and track stability, lapses, accuracy, speed, and learning streaks.</span></div>
+              <div><strong>Card Linking</strong><span>Connect cards using semantic relationships: <code>related</code>, <code>prerequisite</code>, <code>extends</code>, <code>contradicts</code>, and <code>supports</code>.</span></div>
+              <div><strong>Bulk Card Generator</strong><span>Paste any text block and split it into multiple cards with delimiters, or import markdown where each heading becomes a distinct card.</span></div>
+              <div><strong>Presentation Mode</strong><span>Use slideshow mode to present topic cards full-screen, with instant branching into deeper thinking or exercise drills.</span></div>
+            </div>
+          </section>
+
+          <!-- 4. Markdown -->
+          <section id="markdown" class="docs-section">
+            <p class="section-eyebrow">Markdown System</p>
+            <h2>Topics are plain markdown documents with card-aware structure.</h2>
+            <p>ATLAS:Face stores topic documents as plain markdown on disk. This gives you total ownership, git versioning, and scriptability while powering visual cards, layouts, SRS metadata, and graph links. Content under each level-two heading (<code>##</code>) automatically maps to a card.</p>
+            <div class="code-panel">
+              <div class="code-title">Topic Markdown Format</div>
+              <pre><code>---
+title: Spanish Vocabulary
+---
+
+Opening notes before the first card can become topic preamble.
+
+## Hola
+Hello
+
+## Gracias
+Thank you
+
+## Code example
+```js
+console.log("cards can preserve fenced code blocks");
+```</code></pre>
+            </div>
+            <p>ATLAS:Face preserves card metadata separately from the markdown document. Editing the document in external editors (like Obsidian or VS Code) rebuilds cards while preserving SRS review state, grid positions, and relations.</p>
+          </section>
+
+          <!-- 5. Journals & Widgets -->
+          <section id="journals" class="docs-section">
+            <p class="section-eyebrow">Journals &amp; Widgets</p>
+            <h2>Your journal can pull live context from the system.</h2>
+            <p>The Journal is a persistent workspace panel for daily notes, session reflections, research planning, and reusable templates. It supports live widget tokens that automatically expand into snapshots of routines, tasks, focus areas, or daily progress.</p>
+            <div class="docs-grid two-col">
+              <div>
+                <h3>Widget Tokens</h3>
+                <p>Use these tokens in a journal template or daily note to embed real-time system state:</p>
+                <div class="code-panel compact">
+                  <pre><code>{{TODAY}}
+{{ROUTINE}}
+{{TASKS}}
+{{FOCUS}}</code></pre>
+                </div>
+              </div>
+              <div>
+                <h3>What Widgets Include</h3>
+                <ul>
+                  <li><strong>Today Snapshot</strong>: routine, tasks, and focus combined in one cohesive block.</li>
+                  <li><strong>Routine Snapshot</strong>: scheduled time blocks and live completion statuses.</li>
+                  <li><strong>Task Snapshot</strong>: active backlog tasks and tasks completed today.</li>
+                  <li><strong>Focus Snapshot</strong>: active focus themes, prompts, and study goals.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. Routines & Planning -->
+          <section id="planning" class="docs-section">
+            <p class="section-eyebrow">Routines, Tasks, &amp; Focus</p>
+            <h2>Planning lives directly beside knowledge work.</h2>
+            <p>ATLAS:Face integrates an intentional planning layer: knowledge compounds only when you regularly revisit it. The routine system, task panel, daily focus goals, and activity timeline give you structured momentum without leaving your workspace.</p>
+            <div class="docs-grid three-col">
+              <div>
+                <h3>Routine Planner</h3>
+                <p>Create weekly templates and daily flows with blocks for rituals, deep study, breaks, creative work, and review sessions. Blocks track timing, recurrence, priority, and linked topics.</p>
+              </div>
+              <div>
+                <h3>Task Manager</h3>
+                <p>Track tasks, recurring habits, active checklists, and completion history. Checked task states can automatically mirror into daily notes.</p>
+              </div>
+              <div>
+                <h3>Daily Focus &amp; Goals</h3>
+                <p>Set daily focus themes, study reminders, review streaks, and mastery targets to keep learning oriented toward genuine depth.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 7. Maps & Canvas -->
+          <section id="maps" class="docs-section">
+            <p class="section-eyebrow">Spatial Navigation</p>
+            <h2>See ideas spatially when linear lists stop helping.</h2>
+            <p>The Knowledge Universe and Canvas View provide spatial clarity for complex domains. Freeform canvas lets you arrange cards visually, while the Knowledge Universe renders your concepts as a 3D interactive force-directed graph.</p>
+            <div class="docs-list">
+              <div><strong>Canvas View</strong><span>Arrange cards on an infinite spatial board with preserved positioning and visual clustering.</span></div>
+              <div><strong>Knowledge Universe</strong><span>Explore a 3D force-directed node graph showing card linkages, source connections, and concept clusters.</span></div>
+              <div><strong>Multi-select &amp; Batch Ops</strong><span>Select, tag, link, or bulk-export large groups of cards simultaneously.</span></div>
+              <div><strong>Omni Search</strong><span>Instantly search across cards, notes, sources, and tags from the global Activity Rail.</span></div>
+            </div>
+          </section>
+
+          <!-- 8. AI Tools -->
+          <section id="ai" class="docs-section">
+            <p class="section-eyebrow">AI Workbench</p>
+            <h2>AI as precision workbench tools, not a generic chatbot.</h2>
+            <p>AI features in ATLAS:Face are designed as surgical tools for learning: generate cards from sources, ask targeted questions about a specific card, quiz yourself on video lectures, deepen understanding, split dense cards, expand thin notes, and generate mock practice exams.</p>
+            <div class="docs-grid three-col">
+              <div>
+                <h3>Generation</h3>
+                <p>Convert raw text, PDFs, and video transcripts into structured flashcards and test questions with one click.</p>
+              </div>
+              <div>
+                <h3>Contextual Dialogue</h3>
+                <p>Card AI Chat lets you interrogate a specific card or concept in isolation without cluttering your global workspace.</p>
+              </div>
+              <div>
+                <h3>Refinement &amp; Exams</h3>
+                <p>Think Deeper, Card Splitter, Card Expander, and the Exam Generator transform rough notes into rigorous active recall drills.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 9. Publishing -->
+          <section id="publishing" class="docs-section">
+            <p class="section-eyebrow">Publishing</p>
+            <h2>Publish polished topics to the web with zero lock-in.</h2>
+            <p>Turn any topic into an interactive, standalone web page. The local-first export creates self-contained HTML/JS bundles, while GitHub Pages publishing pushes structured study notes directly to your personal domain with interactive review features preserved.</p>
+            <div class="docs-list">
+              <div><strong>Local-first Export</strong><span>Generate standalone HTML/CSS/JS bundles of your topics without requiring server hosting.</span></div>
+              <div><strong>GitHub Pages Publishing</strong><span>Deploy selected notes and topics directly to GitHub Pages with automated updates.</span></div>
+              <div><strong>Interactive Review</strong><span>Published documents maintain active card flipping, quiz mode, and theme switching for visitors.</span></div>
+            </div>
+          </section>
+
+          <!-- 10. Marketplaces -->
+          <section id="marketplaces" class="docs-section">
+            <p class="section-eyebrow">Marketplaces</p>
+            <h2>Install community knowledge packs and extend the app.</h2>
+            <p>ATLAS:Face features two connected ecosystems: the <strong>Community Marketplace</strong> for shared topic packs, study guides, and subject templates, and the <strong>Plugin Marketplace</strong> for installable toolkits, visualizations, and workflow automations.</p>
+            <div class="docs-grid two-col">
+              <div>
+                <h3>Community Content</h3>
+                <p>Browse, install, and share curated study decks, exam preps, and research vaults across science, engineering, languages, medicine, and the humanities.</p>
+              </div>
+              <div>
+                <h3>Plugin Ecosystem</h3>
+                <p>Install plugins that add specialized panels, custom visualizations, external sync pipelines, timers, and specialized hotkeys.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 11. CLI Reference -->
+          <section id="cli" class="docs-section">
+            <p class="section-eyebrow">CLI Reference</p>
+            <h2>The <code>af</code> CLI is engineered for power users and AI agents.</h2>
+            <p>The CLI can manipulate vaults, projects, topics, cards, links, resources, journal entries, backups, imports, exports, and SRS sessions. It provides full automation for terminal power users, cron scripts, and autonomous coding agents like Antigravity, Codex, and Claude Code.</p>
+            <div class="code-panel">
+              <div class="code-title">CLI Quick Start</div>
+              <pre><code>cd cli
+npm install
+npm link
+
+# Inspect status
+af status
+
+# Hierarchy management
+af vault create "Research"
+af project create "Machine Learning" --vault "Research"
+af topic create "Transformers" --project "Machine Learning"
+
+# Card operations
+af card create --topic "Transformers" --front "What is self-attention?" --back "A mechanism relating positions of a sequence."
+
+# Spaced repetition study
+af study start --project "Machine Learning"
+af study rate &lt;card-id&gt; --topic "Transformers" --rating 2</code></pre>
+            </div>
+            <div class="docs-grid two-col">
+              <div>
+                <h3>Primary Command Groups</h3>
+                <ul>
+                  <li><code>af status</code> — checks app status and IPC connection.</li>
+                  <li><code>af data</code> — exports, imports, and manages backups.</li>
+                  <li><code>af vault / project / topic</code> — organizes knowledge hierarchy.</li>
+                  <li><code>af card</code> — creates, updates, links, and lists cards.</li>
+                  <li><code>af study</code> — runs headless SRS sessions and rating.</li>
+                  <li><code>af journal</code> — appends daily notes and snapshots.</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Agent-Friendly Architecture</h3>
+                <ul>
+                  <li>Every command supports <code>--json</code> for clean parsing.</li>
+                  <li>Direct file-access fallback when desktop UI is closed.</li>
+                  <li><code>AF_USER_DATA</code> environment variable for sandboxing.</li>
+                  <li>Batch import via stdin or file: <code>af topic import-md</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- 12. Plugins SDK -->
+          <section id="plugins" class="docs-section">
+            <p class="section-eyebrow">Plugin SDK</p>
+            <h2>Build custom plugins and tools for ATLAS:Face.</h2>
+            <p>The Plugin SDK gives you a structured API to build custom panels, listen to app lifecycle events, register global hotkeys, access local storage, and create tailored review drills.</p>
+            <div class="docs-link-row" aria-label="Plugin GitHub resources">
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface-plugins" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                <span>Plugin Repository</span>
+              </a>
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface-plugins/tree/master/_template" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                <span>Starter Template</span>
+              </a>
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface-plugins/tree/master/sdk" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <span>SDK Reference</span>
+              </a>
+            </div>
+            <div class="code-panel">
+              <div class="code-title">Minimal Plugin Layout</div>
+              <pre><code>my-plugin/
+  manifest.json
+  plugin.js
+  README.md
+  styles.css</code></pre>
+            </div>
+          </section>
+
+          <!-- 13. Settings -->
+          <section id="settings" class="docs-section">
+            <p class="section-eyebrow">Customization</p>
+            <h2>Configure profiles, shortcuts, and sync workflows.</h2>
+            <p>The feature profile selector lets you scale ATLAS:Face from a distraction-free minimalist reader to an all-in-one knowledge workstation.</p>
+            <div class="docs-list">
+              <div><strong>Feature Profiles</strong><span>Choose between Study Session, Essentials, Balanced, or Power User modes.</span></div>
+              <div><strong>Theme Creator</strong><span>Customize palettes, typography scales, contrast tokens, and surface textures.</span></div>
+              <div><strong>Vault Locations</strong><span>Select customized folders on disk for vaults and markdown storage.</span></div>
+              <div><strong>Obsidian Sync</strong><span>Configure two-way sync for flashcards, callouts, and daily note routines.</span></div>
+              <div><strong>Discord Rich Presence</strong><span>Optionally broadcast study activity and topics to Discord.</span></div>
+            </div>
+          </section>
+
+          <!-- Download Section -->
+          <section class="docs-section" id="download-options">
+            <p class="section-eyebrow">Get Started</p>
+            <h2>Download ATLAS:Face for Your Platform</h2>
+            <p>The application is 100% free, local-first, and runs natively across Windows, macOS, and Linux.</p>
+
+            <div class="download-grid">
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface/releases/download/v0.0.49/ATLASFace-Setup-0.0.49.exe" class="download-card primary" data-download-kind="windows-installer" download>
+                <div class="download-card-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5 10.8 3.4v7.9H3V4.5Zm9.4-1.4L21 2v9.3h-8.6V3.1ZM3 12.7h7.8v7.9L3 19.5v-6.8Zm9.4 0H21V22l-8.6-1.2v-8.1Z"/></svg>
+                </div>
+                <div class="download-card-text">
+                  <span class="platform-name">Windows</span>
+                  <strong>64-bit Installer (.exe)</strong>
+                </div>
+              </a>
+
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface/releases/download/v0.0.49/ATLASFace-0.0.49-arm64.dmg" class="download-card" data-download-kind="macos-arm64" download>
+                <div class="download-card-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2.2c.1 1.1-.4 2.2-1.2 3-.8.8-1.9 1.3-3 1.2-.1-1 .4-2.1 1.2-2.9.8-.8 2-1.3 3-1.3Zm3.6 15.5c-.5 1.1-.8 1.6-1.5 2.6-1 1.5-2.5 3.3-4.3 3.3-1.6 0-2-.9-4.1-.9-2.2 0-2.6.9-4.2.9-1.8 0-3.2-1.7-4.2-3.2C-.4 16.6-.8 10.1 3.3 7.5c1.3-.8 2.9-.9 4.3-.4.8.3 1.5.7 2.7.7 1.1 0 1.8-.4 2.7-.7 1.5-.5 3.3-.4 4.6.5-4 2.2-3.3 8.1 2.6 10.1Z"/></svg>
+                </div>
+                <div class="download-card-text">
+                  <span class="platform-name">macOS</span>
+                  <strong>Apple Silicon (.dmg)</strong>
+                </div>
+              </a>
+
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface/releases/download/v0.0.49/ATLASFace-0.0.49-x64.dmg" class="download-card" data-download-kind="macos-x64" download>
+                <div class="download-card-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2.2c.1 1.1-.4 2.2-1.2 3-.8.8-1.9 1.3-3 1.2-.1-1 .4-2.1 1.2-2.9.8-.8 2-1.3 3-1.3Zm3.6 15.5c-.5 1.1-.8 1.6-1.5 2.6-1 1.5-2.5 3.3-4.3 3.3-1.6 0-2-.9-4.1-.9-2.2 0-2.6.9-4.2.9-1.8 0-3.2-1.7-4.2-3.2C-.4 16.6-.8 10.1 3.3 7.5c1.3-.8 2.9-.9 4.3-.4.8.3 1.5.7 2.7.7 1.1 0 1.8-.4 2.7-.7 1.5-.5 3.3-.4 4.6.5-4 2.2-3.3 8.1 2.6 10.1Z"/></svg>
+                </div>
+                <div class="download-card-text">
+                  <span class="platform-name">macOS</span>
+                  <strong>Intel Architecture (.dmg)</strong>
+                </div>
+              </a>
+
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface/releases/download/v0.0.49/ATLASFace-0.0.49.AppImage" class="download-card" data-download-kind="linux-appimage" download>
+                <div class="download-card-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c-2.8 0-4.9 2.4-4.9 5.7 0 1.4-.4 2.7-1.1 4L3.4 17c-.6 1.2.1 2.7 1.4 2.9l3.7.7c.8.6 2 .9 3.5.9s2.7-.3 3.5-.9l3.7-.7c1.3-.2 2-1.7 1.4-2.9L18 12.2c-.7-1.3-1.1-2.6-1.1-4 0-3.3-2.1-5.7-4.9-5.7Zm-2.1 7c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.5.9 1-.4 1-.9 1Zm4.2 0c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.5.9 1-.4 1-.9 1Zm-2.1 1.7 1.5 1.3-1.5.9-1.5-.9 1.5-1.3Z"/></svg>
+                </div>
+                <div class="download-card-text">
+                  <span class="platform-name">Linux</span>
+                  <strong>AppImage Package</strong>
+                </div>
+              </a>
+
+              <a href="https://github.com/Resistance-Labs-Tech/atlasface/releases/download/v0.0.49/ATLASFace-0.0.49.deb" class="download-card" data-download-kind="linux-deb" download>
+                <div class="download-card-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c-2.8 0-4.9 2.4-4.9 5.7 0 1.4-.4 2.7-1.1 4L3.4 17c-.6 1.2.1 2.7 1.4 2.9l3.7.7c.8.6 2 .9 3.5.9s2.7-.3 3.5-.9l3.7-.7c1.3-.2 2-1.7 1.4-2.9L18 12.2c-.7-1.3-1.1-2.6-1.1-4 0-3.3-2.1-5.7-4.9-5.7Zm-2.1 7c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.5.9 1-.4 1-.9 1Zm4.2 0c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.5.9 1-.4 1-.9 1Zm-2.1 1.7 1.5 1.3-1.5.9-1.5-.9 1.5-1.3Z"/></svg>
+                </div>
+                <div class="download-card-text">
+                  <span class="platform-name">Linux</span>
+                  <strong>Debian / Ubuntu (.deb)</strong>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Final Banner -->
+          <div class="docs-final">
+            <h2>Start small, then let the system compound.</h2>
+            <p>Open one source, create a few cards, write raw notes, and let ATLAS:Face connect the rest over time. The power tools are there whenever you need them.</p>
+            <a href="#download-options" class="btn-primary">Download ATLAS:Face</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <div class="footer-logo">ATLAS:Face</div>
+          <p>The local-first knowledge workbench for serious learning and creative synthesis.</p>
+        </div>
+        <div class="footer-right">
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#features">Features</a>
+            <a href="docs.html">Docs</a>
+            <a href="https://github.com/Resistance-Labs-Tech/atlasface" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://discord.gg/64fR7g7Zk7" target="_blank" rel="noopener">Discord</a>
+          </div>
+          <div class="footer-copy">&copy; 2026 Resistance Labs. All rights reserved.</div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
