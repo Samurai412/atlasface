@@ -45,9 +45,9 @@
     <!-- Early Web Bridge Initialization for Browser Mode -->
     <script>
         (function() {
-            var isElectron = !!(typeof process !== 'undefined' && process.versions && process.versions.electron);
+            var isElectron = !!((typeof process !== 'undefined' && process.versions && process.versions.electron) || (window.electronAPI && window.electronAPI.isElectron === true));
             var isCapacitor = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-            if (!isElectron) {
+            if (!isElectron && !isCapacitor) {
                 document.documentElement.classList.add('is-web');
                 if (document.body) document.body.classList.add('is-web');
                 else document.addEventListener('DOMContentLoaded', function() { document.body.classList.add('is-web'); });
@@ -336,7 +336,7 @@
         }
     </style>
 
-  <script type="module" crossorigin src="./assets/index-DCtijOJy.js"></script>
+  <script type="module" crossorigin src="./assets/index-wrzawYmd.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/vendor-codemirror-DUfYp2mG.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-markdown-BkjUMIlX.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-graph-DwCx8zU5.js">

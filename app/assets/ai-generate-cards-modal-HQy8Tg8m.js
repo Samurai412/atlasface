@@ -1,0 +1,95 @@
+import{w as k,y as T}from"./index-wrzawYmd.js";import"./vendor-codemirror-DUfYp2mG.js";import"./vendor-markdown-BkjUMIlX.js";import"./vendor-graph-DwCx8zU5.js";class x extends k{constructor(){super("ai-gen-cards-overlay"),this.textarea=null,this.charCount=null,this.generateBtn=null,this.statusText=null,this.previewSection=null,this.previewList=null,this.cardCountLabel=null,this.addCardsBtn=null,this.cancelBtn=null,this.errorBox=null,this.lessonSelect=null,this.generatedCards=[],this.isGenerating=!1}initialize(){return super.initialize()?(this.textarea=document.getElementById("ai-gen-cards-textarea"),this.charCount=document.getElementById("ai-gen-cards-char-count"),this.generateBtn=document.getElementById("ai-gen-cards-generate-btn"),this.statusText=document.getElementById("ai-gen-cards-status"),this.previewSection=document.getElementById("ai-gen-cards-preview"),this.previewList=document.getElementById("ai-gen-cards-list"),this.cardCountLabel=document.getElementById("ai-gen-cards-count"),this.addCardsBtn=document.getElementById("ai-gen-cards-add-btn"),this.cancelBtn=document.getElementById("ai-gen-cards-cancel-btn"),this.errorBox=document.getElementById("ai-gen-cards-error"),this.lessonSelect=document.getElementById("ai-gen-cards-lesson-select"),!this.textarea||!this.previewList?(console.error("[AIGenCards] Required DOM elements not found"),!1):(this.cleanup.addEventListener(this.generateBtn,"click",()=>this._onGenerate()),this.cleanup.addEventListener(this.addCardsBtn,"click",()=>this._onAddCards()),this.cleanup.addEventListener(this.cancelBtn,"click",()=>this.hide()),this.cleanup.addEventListener(this.textarea,"input",()=>this._updateCharCount()),this.isInitialized=!0,!0)):!1}show(e){!this.isInitialized&&!this.initialize()||(this.generatedCards=[],this._clearPreview(),this._hideError(),this._setGenerating(!1),this.statusText&&(this.statusText.textContent=""),this._populateLessonSelect(),this.textarea&&(this.textarea.value=typeof e=="string"?e:""),this._updateCharCount(),super.show(),setTimeout(()=>this.textarea?.focus(),150))}_populateLessonSelect(){if(!this.lessonSelect)return;const e=window.state;if(!e)return;const r=e.getCurrentLessonId?.(),a=e.getCurrentCourseId?.();let s="";if(r){const o=e.findLesson(r);o&&(s+=`<option value="${o.id}" selected>${o.name||"Current Topic"}</option>`)}if(a){const o=e.findCourse(a);o?.lessons&&o.lessons.forEach(c=>{c.id!==r&&(s+=`<option value="${c.id}">${c.name||"Untitled"}</option>`)})}s||(e.data?.courses||[]).forEach(c=>{(c.lessons||[]).forEach(g=>{s+=`<option value="${g.id}">${c.name?c.name+" / ":""}${g.name||"Untitled"}</option>`})}),this.lessonSelect.innerHTML=s||"<option disabled>No topics found</option>"}async _onGenerate(){const e=this.textarea?.value?.trim();if(!e){this._showError("Paste some content first.");return}if(e.length<30){this._showError("Content is too short — add more text for meaningful cards.");return}this._hideError(),this._setGenerating(!0),this.statusText&&(this.statusText.textContent="AI is reading your content…");try{const r=this._buildPrompt(e),a=await T(r,{temperature:.25,maxOutputTokens:8192}),s=this._parseResponse(a);if(!s.length)throw new Error("AI produced no usable cards.");this.generatedCards=s.map(o=>({...o,selected:!0})),this._renderPreview(),this.statusText&&(this.statusText.textContent=`${s.length} linked learning/review cards generated — review and add to topic.`)}catch(r){console.error("[AIGenCards] Generation error:",r),this._showError(r.message||"Generation failed. Try again.")}finally{this._setGenerating(!1)}}_buildPrompt(e){const r=e.replace(/<[^>]*>/g," ").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g," ").replace(/[ \t]+/g," ").replace(/\n\s*\n\s*\n/g,`
+
+`).trim(),a=this._estimateTargetCardCount(r);return`You are an expert learning designer creating high-quality study cards for first-time understanding and later review.
+
+Source material:
+${r}
+
+Goal:
+    Generate about ${a} total cards.
+    Prefer fewer, better cards over many shallow cards.
+    Focus only on the concepts that are actually important for understanding the topic.
+    For each major concept, create:
+    - 1 learning card for first-pass understanding
+    - 1 memory card for later retrieval review
+    - optionally 1 extra memory card only if the concept is especially procedural, comparative, or easy to confuse
+
+Learning-science rules:
+- Each concept should have a linked pair: a learning card and at least one memory card.
+- Learning cards are for initial understanding, not SRS testing.
+- Memory cards are for stable spaced retrieval review.
+- Learning cards should feel like the kind of card a student would actually use to learn the topic for the first time.
+- Learning cards should explain the big picture, the key mechanism or logic, why it matters, and one concrete example, analogy, or comparison when useful.
+- Learning cards should not read like dictionary definitions or sterile textbook fragments.
+- Memory cards should test what the learning card just taught.
+- Memory cards should use specific recall, cloze, compare, or apply prompts.
+- Do NOT produce dialogue scripts, reflective journaling prompts, or long unfocused essays.
+- Do NOT copy large sentences verbatim from the source unless essential for precision.
+- Do NOT create cards for trivial headings, formatting, or obvious filler.
+- Avoid duplicate cards and avoid multiple cards asking the same thing in slightly different wording.
+- If the source is thin or vague, make fewer cards rather than inventing weak ones.
+
+CRITICAL learning card title & front rules:
+- Learning-card "title" MUST be a short concept label — a noun phrase like "Mitosis", "Supply & Demand", or "Binary Search".
+- Learning-card "front" MUST also be the same concept label or a very short concept-oriented heading. It must NOT be a question.
+- Learning-card "back" should be 120-220 words and use a clear structure like:
+  - Core idea
+  - Why it matters
+  - Example / comparison / common confusion
+  - Quick check question at the end
+- Order learning cards in a logical progression so a student reading them top-to-bottom learns the topic coherently.
+
+CRITICAL overview-first rule:
+- The VERY FIRST learning card MUST be a high-level overview of the entire topic.
+  - Its title should be the topic name itself (e.g. "Photosynthesis", "The French Revolution", "Object-Oriented Programming").
+  - Its back should summarize what the topic is about, why it matters, and briefly outline the 3-5 key sub-concepts the later cards will cover — like a roadmap for the student.
+  - This overview card should NOT dive into any single detail; it sets the stage for everything that follows.
+- All subsequent learning cards then cover the specific sub-concepts in a logical teaching order, from foundational to advanced.
+
+Memory card rules:
+- Memory-card fronts should be specific recall questions answerable from memory.
+- Memory-card backs should be concise feedback: usually 1-4 bullets or a short paragraph, under 60 words.
+- When needed, add just enough context on the back to disambiguate the answer.
+- Use simple markdown and KaTeX only when truly useful.
+
+Role rules:
+- Use "cardRole": "learning" for learning cards.
+- Use "cardRole": "memory" for review cards.
+    - Usually keep a 1:1 learning-to-memory ratio.
+- Add a second memory card only when it clearly improves review coverage.
+
+Respond with ONLY valid JSON using this exact schema:
+{
+    "cards": [
+        {
+            "conceptId": "shared-concept-id",
+            "cardRole": "learning|memory",
+            "title": "short concept label",
+            "front": "question or cloze prompt",
+            "back": "concise answer or feedback",
+            "cardType": "learning|basic|cloze|compare|apply",
+            "difficulty": "core|stretch",
+            "tags": ["topic", "keyword"]
+        }
+    ]
+}
+
+Output constraints:
+- Output JSON only.
+- Ensure every card has non-empty "front" and "back".
+- Ensure each concept has exactly one learning card and at least one memory card.
+- Keep "title" short.
+- For learning cards, "title" and "front" MUST both be a short concept label (NOT a question). Example: "Mitosis" or "Ohm's Law".
+- For memory cards, make "front" a precise review prompt.
+- The first learning card MUST be a high-level topic overview — NOT a detail card.
+- Order remaining learning cards in a logical teaching sequence from foundational to advanced.
+- Keep tags short and useful.`}_estimateTargetCardCount(e){const r=String(e||"").trim().split(/\s+/).filter(Boolean).length;return r<=0?6:Math.max(4,Math.min(14,Math.round(r/180)))}_normalizeCardTitle(e,r,a=0){const s=String(e||"").trim(),o=String(r||"").trim();if(s&&s.toLowerCase()!==o.toLowerCase())return s;const c=o.replace(/\{\{blank\}\}/gi,"blank").replace(/^(what is|what are|how does|how do|why does|why is|define|describe|explain|compare)\s+/i,"").replace(/[?!.:]+$/g,"").trim();return c?c.slice(0,80):`AI Card ${a+1}`}_formatCardContent(e,r){return String(r||"").trim()}_buildFallbackLearningFront(e,r=0){const a=String(e?.conceptLabel||"").trim(),s=String(e?.front||"").trim();return(a||s||`Concept ${r+1}`).replace(/[?!.:]+$/g,"").trim()||`Concept ${r+1}`}_ensureLinkedCardPairs(e){if(!Array.isArray(e)||e.length===0)return[];const r=e.map((o,c)=>({...o,conceptId:o.conceptId||`concept_${c+1}`,cardRole:String(o.cardRole||"memory").toLowerCase()==="learning"?"learning":"memory"})),a=new Map;r.forEach((o,c)=>{const g=o.conceptId||`concept_${c+1}`;a.has(g)||a.set(g,[]),a.get(g).push(o)});const s=[];return a.forEach((o,c)=>{const g=o.filter(t=>t.cardRole==="learning"),m=o.filter(t=>t.cardRole!=="learning");if(g.length===0&&m.length>0){const t=m[0];s.push({...t,conceptId:c,cardRole:"learning",cardType:"learning",difficulty:t.difficulty||"core",front:this._buildFallbackLearningFront(t,s.length),title:this._buildFallbackLearningFront(t,s.length)})}if(s.push(...o),m.length===0&&g.length>0){const t=g[0];s.push({...t,conceptId:c,cardRole:"memory",cardType:t.cardType==="learning"?"basic":t.cardType||"basic",difficulty:t.difficulty||"core",front:String(t.front||t.title||"").trim().endsWith("?")?String(t.front||t.title||"").trim():`What should you remember about ${this._buildFallbackLearningFront(t,s.length)}?`,title:String(t.front||t.title||"").trim().endsWith("?")?String(t.front||t.title||"").trim():`What should you remember about ${this._buildFallbackLearningFront(t,s.length)}?`})}}),s}_parseResponse(e){const r=t=>!t||typeof t!="string"?"":t.replace(/\\n/g,`
+`).replace(/\\"/g,'"').replace(/\\'/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&#x27;/g,"'").replace(/&apos;/g,"'").replace(/&nbsp;/g," ").replace(/&hellip;/g,"...").replace(/&mdash;/g,"—").replace(/&ndash;/g,"–").replace(/&lsquo;/g,"'").replace(/&rsquo;/g,"'").replace(/&ldquo;/g,'"').replace(/&rdquo;/g,'"').replace(/&#(\d+);/g,(h,l)=>String.fromCharCode(+l)).replace(/&#x([a-fA-F0-9]+);/g,(h,l)=>String.fromCharCode(parseInt(l,16))).trim();let a;try{let t=e.replace(/^.*?(\{[\s\S]*\}|\[[\s\S]*\]).*$/m,"$1").replace(/[\x00-\x1F\x7F-\x9F]/g,"").replace(/,(?=\s*[}\]])/g,"").trim();a=JSON.parse(t)}catch{const t=[...e.matchAll(/"front"\s*:\s*"((?:[^"\\]|\\.)*)"/g)].map(i=>i[1]),h=[...e.matchAll(/"back"\s*:\s*"((?:[^"\\]|\\.)*)"/g)].map(i=>i[1]),l=[...e.matchAll(/"title"\s*:\s*"((?:[^"\\]|\\.)*)"/g)].map(i=>i[1]);if(t.length&&h.length)return a={cards:t.slice(0,h.length).map((i,u)=>({title:l[u]||i,front:i,back:h[u]}))},this._parseResponse(JSON.stringify(a));const n=[...e.matchAll(/"content"\s*:\s*"((?:[^"\\]|\\.)*)"/g)].map(i=>i[1]);a=[];for(let i=0;i<Math.min(l.length,n.length);i+=2)l[i]&&n[i]&&l[i+1]&&n[i+1]&&a.push({concept_id:`fb_${Date.now()}_${i/2}`,instruction_card:{title:l[i],content:n[i]},dialogue_card:{title:l[i+1],content:n[i+1]}})}const s=Array.isArray(a)?a:Array.isArray(a?.cards)?a.cards:[];if(!s.length)return[];const o=[];s.forEach((t,h)=>{const l=t.concept_id||`auto_${Date.now()}_${h}`;if(t.front&&t.back){const n=r(t.cardRole||"memory").toLowerCase(),i=r(t.title||""),u=r(t.front),p=n==="learning"&&i?i:u;o.push({conceptId:r(t.conceptId||l),cardRole:n,conceptLabel:this._normalizeCardTitle(i,u,h),title:p,front:u,back:r(t.back),cardType:r(t.cardType||"basic").toLowerCase(),difficulty:r(t.difficulty||"core").toLowerCase(),tags:Array.isArray(t.tags)?t.tags.map(f=>r(f)).filter(Boolean):[l]});return}t.instruction_card?.title&&t.instruction_card?.content&&o.push({conceptId:l,cardRole:"learning",conceptLabel:this._normalizeCardTitle(r(t.instruction_card.title),r(t.instruction_card.title),h),title:r(t.instruction_card.title),front:r(t.instruction_card.title),back:r(t.instruction_card.content),cardType:"learning",difficulty:"core",tags:[l]}),t.dialogue_card?.title&&t.dialogue_card?.content&&o.push({conceptId:l,cardRole:"memory",conceptLabel:this._normalizeCardTitle(r(t.dialogue_card.title),r(t.dialogue_card.title),h),title:r(t.dialogue_card.title),front:r(t.dialogue_card.title),back:r(t.dialogue_card.content),cardType:"apply",difficulty:"stretch",tags:[l]})});const c=new Set,g=o.filter(t=>{const h=(t.front||"").toLowerCase().replace(/\s+/g," ").trim(),l=(t.back||"").toLowerCase().replace(/\s+/g," ").trim();if(!h||!l)return!1;const n=`${h}::${l}`;return c.has(n)?!1:(c.add(n),!0)}),m=this._ensureLinkedCardPairs(g);return this._numberLearningCards(m)}_numberLearningCards(e){let r=1;return e.map(a=>{if(a.cardRole!=="learning")return a;const s=String(a.title||"").trim();if(/^\d+[\.\)]\s/.test(s)||/^[IVXLC]+[\.\)]\s/.test(s)){const c=r===1?{...a,isOverview:!0}:a;return r++,c}const o={...a,title:`${r}. ${s}`,...r===1?{isOverview:!0}:{}};return r++,o})}_renderPreview(){!this.previewList||!this.previewSection||(this.previewSection.classList.add("has-cards"),this.previewList.innerHTML="",this.generatedCards.forEach((e,r)=>{const a=document.createElement("label");a.className="ai-gen-card-item"+(e.selected?"":" excluded");const s=e.cardRole==="learning"?"learning":"memory",o=e.isOverview?"overview":e.cardType&&e.cardType!==s?`${s} · ${e.cardType}`:s;a.innerHTML=`
+                <input type="checkbox" class="ai-gen-card-checkbox" data-idx="${r}" ${e.selected?"checked":""}>
+                <div class="ai-gen-card-info">
+                    <div class="ai-gen-card-title">${this._escHtml(e.title||e.front||"Untitled card")}</div>
+                    <div class="ai-gen-card-snippet">Q: ${this._escHtml((e.front||"").substring(0,100))}${(e.front||"").length>100?"…":""}</div>
+                    <div class="ai-gen-card-snippet">A: ${this._escHtml((e.back||"").substring(0,120))}${(e.back||"").length>120?"…":""}</div>
+                </div>
+                <span class="ai-gen-card-type">${this._escHtml(o)}</span>
+            `;const c=a.querySelector("input");c.addEventListener("change",()=>{e.selected=c.checked,a.classList.toggle("excluded",!c.checked),this._updateAddBtn()}),this.previewList.appendChild(a)}),this._updateAddBtn())}_clearPreview(){this.previewSection&&this.previewSection.classList.remove("has-cards"),this.previewList&&(this.previewList.innerHTML=""),this.cardCountLabel&&(this.cardCountLabel.textContent="")}_updateAddBtn(){const e=this.generatedCards.filter(r=>r.selected).length;this.cardCountLabel&&(this.cardCountLabel.textContent=`${e} / ${this.generatedCards.length} selected`),this.addCardsBtn&&(this.addCardsBtn.disabled=e===0)}_onAddCards(){const e=this.generatedCards.filter(n=>n.selected);if(!e.length)return;const r=this.lessonSelect?Number(this.lessonSelect.value)||this.lessonSelect.value:null,a=window.state;if(!a||!r){this._showError("No target topic selected.");return}const s=a.findLesson(r);if(!s){this._showError("Target topic not found.");return}const o=Date.now(),c=e.filter(n=>(n.cardRole||"memory")!=="memory").length;let g=0,m=0;const t=e.map((n,i)=>{const p=(n.cardRole||"memory")==="memory"?c+m++:g++;return{id:o+i+Math.floor(Math.random()*1e3),title:n.title||n.front||`Card ${i+1}`,content:this._formatCardContent(n.front,n.back),body:n.back,front:n.front,back:n.back,type:"text",gsW:4,gsH:4,gsX:p%3*4,gsY:Math.floor(p/3)*4,links:[],tags:n.tags||[],aiGenerated:!0,conceptId:n.conceptId||`concept_${i}`,conceptLabel:n.conceptLabel||this._normalizeCardTitle("",n.front,i),cardRole:n.cardRole||"memory",reviewMode:n.cardRole==="learning"?"learning":"memory",aiCardType:n.cardType||"basic",aiDifficulty:n.difficulty||"core",createdAt:new Date().toISOString()}}),h=new Map;if(t.forEach(n=>{const i=n.conceptId||String(n.id);h.has(i)||h.set(i,[]),h.get(i).push(n)}),h.forEach(n=>{const i=n.map(u=>u.id);n.forEach(u=>{u.linkedCardIds=i.filter(p=>p!==u.id)})}),t.forEach(n=>a.addCard(r,n)),a.getCurrentLessonId?.()===r){const n=window.gridstackInstance,i=window.renderCardDisplayContent,u=window.applyPostRenderEffects,p=t.filter(f=>(f.cardRole||f.reviewMode||"")!=="memory");if(n&&i){let f=!1;if(p.length>3&&typeof n.batchUpdate=="function")try{n.batchUpdate(),f=!0}catch{}if(p.forEach(d=>{const y=document.createElement("div");y.className="grid-stack-item grid-stack-item-custom concept-card text-card card-entering",y.dataset.cardRole=d.cardRole||d.reviewMode||"",y.setAttribute("gs-id",String(d.id));const C=document.createElement("div");C.className="grid-stack-item-content",C.dataset.cardRole=d.cardRole||d.reviewMode||"",y.appendChild(C);const w=document.createElement("h4");w.className="grid-item-title",w.textContent=d.title||d.front||"Untitled",w.dataset.cardRole=d.cardRole||d.reviewMode||"",w.dataset.cardId=String(d.id),y.insertBefore(w,C);const _=n.addWidget({el:y,x:d.gsX,y:d.gsY,w:d.gsW,h:d.gsH,id:String(d.id)});if(!_)return;const v=_.querySelector(".grid-stack-item-content");if(v){const L=i(d),b=document.createElement("div");b.className="card-display-area",b.innerHTML=L,b.dataset.cardId=String(d.id),typeof window.setupCardDisplayAreaInteraction=="function"&&window.setupCardDisplayAreaInteraction(b,d),v.appendChild(b),u&&u(v)}}),f&&typeof n.commit=="function")try{n.commit()}catch{}}else typeof window.displayNoteContent=="function"&&window.displayNoteContent(s)}typeof window.saveData=="function"&&window.saveData(),typeof window.renderLessons=="function"&&window.renderLessons(),typeof window.showToast=="function"&&window.showToast(`Added ${t.length} cards to "${s.name}"`,"success"),this.hide()}_setGenerating(e){this.isGenerating=e,this.generateBtn&&(this.generateBtn.disabled=e,this.generateBtn.classList.toggle("generating",e)),this.textarea&&(this.textarea.disabled=e)}_updateCharCount(){if(!this.charCount||!this.textarea)return;const e=this.textarea.value.length;this.charCount.textContent=e>0?`${e.toLocaleString()} chars`:""}_showError(e){this.errorBox&&(this.errorBox.textContent=e,this.errorBox.classList.add("visible"))}_hideError(){this.errorBox&&this.errorBox.classList.remove("visible")}_escHtml(e){const r=document.createElement("div");return r.textContent=e,r.innerHTML}}const R=new x;export{x as AIGenerateCardsModal,R as aiGenerateCardsModal};
