@@ -45,7 +45,14 @@
     <!-- Early Web Bridge Initialization for Browser Mode -->
     <script>
         (function() {
-            if (!window.electronAPI && !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
+            var isElectron = !!(typeof process !== 'undefined' && process.versions && process.versions.electron);
+            var isCapacitor = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+            if (!isElectron) {
+                document.documentElement.classList.add('is-web');
+                if (document.body) document.body.classList.add('is-web');
+                else document.addEventListener('DOMContentLoaded', function() { document.body.classList.add('is-web'); });
+            }
+            if (!window.electronAPI && !isCapacitor) {
                 var noop = function() { return Promise.resolve({ success: true }); };
                 window.electronAPI = new Proxy({
                     isWeb: true,
@@ -329,12 +336,12 @@
         }
     </style>
 
-  <script type="module" crossorigin src="./assets/index-QHYFmtLO.js"></script>
+  <script type="module" crossorigin src="./assets/index-DCtijOJy.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/vendor-codemirror-DUfYp2mG.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-markdown-BkjUMIlX.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-graph-DwCx8zU5.js">
   <link rel="stylesheet" crossorigin href="./assets/vendor-markdown-BCx1q_2Y.css">
-  <link rel="stylesheet" crossorigin href="./assets/index-DNHYr3q3.css">
+  <link rel="stylesheet" crossorigin href="./assets/index-DMbRSi8e.css">
 </head>
 
 <body>
