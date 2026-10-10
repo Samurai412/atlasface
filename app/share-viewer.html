@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Lesson - ATLAS:Face</title>
+    <meta name="description" content="Interactive lesson viewer powered by ATLAS:Face - Your AI-Powered Learning Companion">
+    <meta property="og:title" content="Shared Lesson - ATLAS:Face">
+    <meta property="og:description" content="View this interactive lesson shared from ATLAS:Face">
+    <meta property="og:type" content="website">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #242424;
+            --bg-card-hover: #2a2a2a;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666;
+            --accent: #7dd3fc;
+            --accent-hover: #5fc4f5;
+            --accent-muted: rgba(125, 211, 252, 0.2);
+            --border: #333;
+            --border-focus: #444;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --error: #f87171;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Error State */
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            filter: grayscale(1);
+        }
+        
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--error);
+        }
+        
+        .error-message {
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .error-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .header-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg-primary);
+        }
+        
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .view-toggle {
+            display: flex;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 4px;
+            gap: 4px;
+        }
+        
+        .view-toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .view-toggle-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        .view-toggle-btn:hover:not(.active) {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Lesson Info */
+        .lesson-info {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        
+        .lesson-info h2 {
+            font-size: 2.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent);
+            word-break: break-word;
+        }
+        
+        .lesson-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .lesson-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .slideshow-btn {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slideshow-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Cards List */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .cards-list .card {
+            max-width: 100%;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+        }
+        
+        .card.expanded {
+            grid-column: 1 / -1;
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-number {
+            background: var(--accent);
+            color: var(--bg-primary);
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            flex-grow: 1;
+            line-height: 1.4;
+        }
+        
+        .card-expand-icon {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+        
+        .card.expanded .card-expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        .card-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            overflow: hidden;
+        }
+        
+        .card:not(.expanded) .card-content {
+            max-height: 180px;
+            -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+        }
+        
+        .card.expanded .card-content {
+            max-height: none;
+        }
+        
+        /* Card Content Typography */
+        .card-content h1, .card-content h2, .card-content h3,
+        .card-content h4, .card-content h5, .card-content h6 {
+            color: var(--text-primary);
+            margin-top: 1.25rem;
+            margin-bottom: 0.625rem;
+            line-height: 1.3;
+        }
+        
+        .card-content h1 { font-size: 1.5rem; }
+        .card-content h2 { font-size: 1.35rem; }
+        .card-content h3 { font-size: 1.2rem; }
+        
+        .card-content p { 
+            margin-bottom: 0.875rem;
+        }
+        
+        .card-content ul, .card-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 0.875rem;
+        }
+        
+        .card-content li {
+            margin-bottom: 0.375rem;
+        }
+        
+        .card-content code {
+            background: var(--bg-secondary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875em;
+            color: var(--accent);
+        }
+        
+        .card-content pre {
+            background: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+        }
+        
+        .card-content pre code {
+            padding: 0;
+            background: none;
+            color: var(--text-primary);
+        }
+        
+        .card-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .card-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 0.75rem 1.25rem;
+            margin: 1rem 0;
+            background: var(--accent-muted);
+            border-radius: 0 8px 8px 0;
+            color: var(--text-primary);
+        }
+        
+        .card-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .card-content th, .card-content td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        .card-content th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .expand-hint {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .card.expanded .expand-hint {
+            display: none;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+        
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-cta {
+            margin-top: 1rem;
+        }
+        
+        .footer-cta a {
+            background: var(--bg-card);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        
+        .footer-cta a:hover {
+            text-decoration: none;
+            border-color: var(--accent);
+            background: var(--accent-muted);
+        }
+        
+        /* Slideshow Overlay */
+        .slideshow-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .slideshow-overlay.active {
+            display: flex;
+        }
+        
+        .slideshow-header {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .slideshow-header h2 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .slide-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .slide-counter {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--bg-primary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .close-slideshow {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .close-slideshow:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+        
+        .slide-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+        
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-content h1 {
+            font-size: 2.75rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        
+        .slide-content .content-body {
+            font-size: 1.35rem;
+            line-height: 1.9;
+            color: var(--text-primary);
+        }
+        
+        .slide-content .content-body h1,
+        .slide-content .content-body h2,
+        .slide-content .content-body h3 {
+            margin-top: 2rem;
+        }
+        
+        .slideshow-controls {
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.875rem 2.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .slide-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0 1rem;
+        }
+        
+        .slide-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .slide-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+        
+        .slide-dot:hover:not(.active) {
+            background: var(--text-muted);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { 
+                padding: 1rem; 
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .container { padding: 1rem; }
+            
+            .lesson-info {
+                padding: 1.5rem;
+            }
+            
+            .lesson-info h2 { font-size: 1.5rem; }
+            
+            .lesson-stats { 
+                flex-direction: column; 
+                gap: 0.5rem;
+            }
+            
+            .cards-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .card.expanded { 
+                grid-column: 1; 
+            }
+            
+            .slide-content h1 { font-size: 1.75rem; }
+            .slide-content .content-body { font-size: 1.1rem; }
+            
+            .slideshow-header {
+                padding: 1rem;
+            }
+            
+            .slideshow-header h2 {
+                font-size: 1rem;
+                order: 2;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .slide-main { padding: 1.5rem; }
+            
+            .nav-btn { padding: 0.75rem 1.5rem; }
+            
+            .progress-bar { width: 100px; }
+            
+            .slide-dots { display: none; }
+        }
+        
+        /* Print styles */
+        @media print {
+            .header, .footer, .slideshow-btn, .expand-hint, .card-expand-icon { display: none; }
+            .card { break-inside: avoid; page-break-inside: avoid; }
+            .card-content { max-height: none !important; mask-image: none !important; }
+            body { background: white; color: black; }
+            .card { border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading State -->
+    <div id="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading shared lesson...</p>
+    </div>
+    
+    <!-- Error State (hidden by default) -->
+    <div id="error" class="error-container" style="display: none;">
+        <div class="error-icon">📚</div>
+        <h2 class="error-title">Unable to Load Lesson</h2>
+        <p class="error-message" id="error-message">The shared lesson could not be loaded. The link may be invalid or expired.</p>
+        <a href="https://github.com/atlas-face/atlas-face" class="error-link" target="_blank">Learn more about ATLAS:Face →</a>
+    </div>
+    
+    <!-- Main Content (hidden until loaded) -->
+    <div id="main-content" style="display: none;">
+        <header class="header">
+            <div class="header-brand">
+                <div class="header-logo">A</div>
+                <h1>ATLAS:Face</h1>
+            </div>
+            <div class="header-actions">
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" data-view="grid" onclick="setView('grid')">Grid</button>
+                    <button class="view-toggle-btn" data-view="list" onclick="setView('list')">List</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="lesson-info">
+                <h2 id="lesson-title">Shared Lesson</h2>
+                <div class="lesson-stats">
+                    <span class="lesson-stat">
+                        <span>📇</span>
+                        <span id="card-count">0 cards</span>
+                    </span>
+                    <span class="lesson-stat">
+                        <span>🔗</span>
+                        <span>Shared via ATLAS:Face</span>
+                    </span>
+                </div>
+                <button class="slideshow-btn" onclick="startSlideshow()">
+                    <span>▶</span> Start Slideshow
+                </button>
+            </div>
+            
+            <div class="cards-grid" id="cards-container"></div>
+        </div>
+        
+        <footer class="footer">
+            <p>Shared with <a href="https://github.com/atlas-face/atlas-face" target="_blank">ATLAS:Face</a> - Your AI-Powered Learning Companion</p>
+            <div class="footer-cta">
+                <a href="https://github.com/atlas-face/atlas-face" target="_blank">✨ Get ATLAS:Face for Free</a>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Slideshow Overlay -->
+    <div class="slideshow-overlay" id="slideshow">
+        <div class="slideshow-header">
+            <h2 id="slideshow-title">Lesson Title</h2>
+            <div class="slide-progress">
+                <span class="slide-counter" id="slide-counter">1 / 1</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <button class="close-slideshow" onclick="closeSlideshow()">
+                <span>✕</span> Exit
+            </button>
+        </div>
+        <div class="slide-main">
+            <div class="slide-content" id="slide-content"></div>
+        </div>
+        <div class="slideshow-controls">
+            <button class="nav-btn" id="prev-btn" onclick="prevSlide()">← Previous</button>
+            <div class="slide-dots" id="slide-dots"></div>
+            <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
+        </div>
+    </div>
+    
+    <script>
+        // LZ-String decompression (same algorithm used for compression)
+        const LZString = {
+            decompressFromEncodedURIComponent: function(input) {
+                if (input == null) return "";
+                if (input == "") return null;
+                input = input.replace(/ /g, "+");
+                return LZString._decompress(input.length, 32, function(index) {
+                    return LZString.getBaseValue(LZString.keyStrUriSafe, input.charAt(index));
+                });
+            },
+            
+            keyStrUriSafe: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$",
+            baseReverseDic: {},
+            
+            getBaseValue: function(alphabet, character) {
+                if (!LZString.baseReverseDic[alphabet]) {
+                    LZString.baseReverseDic[alphabet] = {};
+                    for (let i = 0; i < alphabet.length; i++) {
+                        LZString.baseReverseDic[alphabet][alphabet.charAt(i)] = i;
+                    }
+                }
+                return LZString.baseReverseDic[alphabet][character];
+            },
+            
+            _decompress: function(length, resetValue, getNextValue) {
+                const dictionary = [];
+                let next, enlargeIn = 4, dictSize = 4, numBits = 3, entry = "", result = [];
+                let i, w, bits, resb, maxpower, power, c;
+                let data = {val: getNextValue(0), position: resetValue, index: 1};
+
+                for (i = 0; i < 3; i++) dictionary[i] = i;
+
+                bits = 0;
+                maxpower = Math.pow(2, 2);
+                power = 1;
+                while (power != maxpower) {
+                    resb = data.val & data.position;
+                    data.position >>= 1;
+                    if (data.position == 0) {
+                        data.position = resetValue;
+                        data.val = getNextValue(data.index++);
+                    }
+                    bits |= (resb > 0 ? 1 : 0) * power;
+                    power <<= 1;
+                }
+
+                switch (next = bits) {
+                    case 0:
+                        bits = 0;
+                        maxpower = Math.pow(2, 8);
+                        power = 1;
+                        while (power != maxpower) {
+                            resb = data.val & data.position;
+                            data.position >>= 1;
+                            if (data.position == 0) {
+                                data.position = resetValue;
+                                data.val = getNextValue(data.index++);
+                            }
+                            bits |= (resb > 0 ? 1 : 0) * power;
+                            power <<= 1;
+                        }
+                        c = String.fromCharCode(bits);
+                        break;
+                    case 1:
+                        bits = 0;
+                        maxpower = Math.pow(2, 16);
+                        power = 1;
+                        while (power != maxpower) {
+                            resb = data.val & data.position;
+                            data.position >>= 1;
+                            if (data.position == 0) {
+                                data.position = resetValue;
+                                data.val = getNextValue(data.index++);
+                            }
+                            bits |= (resb > 0 ? 1 : 0) * power;
+                            power <<= 1;
+                        }
+                        c = String.fromCharCode(bits);
+                        break;
+                    case 2:
+                        return "";
+                }
+                
+                dictionary[3] = c;
+                w = c;
+                result.push(c);
+                
+                while (true) {
+                    if (data.index > length) return "";
+
+                    bits = 0;
+                    maxpower = Math.pow(2, numBits);
+                    power = 1;
+                    while (power != maxpower) {
+                        resb = data.val & data.position;
+                        data.position >>= 1;
+                        if (data.position == 0) {
+                            data.position = resetValue;
+                            data.val = getNextValue(data.index++);
+                        }
+                        bits |= (resb > 0 ? 1 : 0) * power;
+                        power <<= 1;
+                    }
+
+                    switch (c = bits) {
+                        case 0:
+                            bits = 0;
+                            maxpower = Math.pow(2, 8);
+                            power = 1;
+                            while (power != maxpower) {
+                                resb = data.val & data.position;
+                                data.position >>= 1;
+                                if (data.position == 0) {
+                                    data.position = resetValue;
+                                    data.val = getNextValue(data.index++);
+                                }
+                                bits |= (resb > 0 ? 1 : 0) * power;
+                                power <<= 1;
+                            }
+                            dictionary[dictSize++] = String.fromCharCode(bits);
+                            c = dictSize - 1;
+                            enlargeIn--;
+                            break;
+                        case 1:
+                            bits = 0;
+                            maxpower = Math.pow(2, 16);
+                            power = 1;
+                            while (power != maxpower) {
+                                resb = data.val & data.position;
+                                data.position >>= 1;
+                                if (data.position == 0) {
+                                    data.position = resetValue;
+                                    data.val = getNextValue(data.index++);
+                                }
+                                bits |= (resb > 0 ? 1 : 0) * power;
+                                power <<= 1;
+                            }
+                            dictionary[dictSize++] = String.fromCharCode(bits);
+                            c = dictSize - 1;
+                            enlargeIn--;
+                            break;
+                        case 2:
+                            return result.join('');
+                    }
+
+                    if (enlargeIn == 0) {
+                        enlargeIn = Math.pow(2, numBits);
+                        numBits++;
+                    }
+
+                    if (dictionary[c]) {
+                        entry = dictionary[c];
+                    } else {
+                        if (c === dictSize) {
+                            entry = w + w.charAt(0);
+                        } else {
+                            return null;
+                        }
+                    }
+                    result.push(entry);
+
+                    dictionary[dictSize++] = w + entry.charAt(0);
+                    enlargeIn--;
+
+                    if (enlargeIn == 0) {
+                        enlargeIn = Math.pow(2, numBits);
+                        numBits++;
+                    }
+
+                    w = entry;
+                }
+            }
+        };
+        
+        // Global state
+        let lessonData = null;
+        let currentSlide = 0;
+        let currentView = 'grid';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('d');
+            
+            if (!encodedData) {
+                showError('No lesson data found in the URL.');
+                return;
+            }
+            
+            try {
+                const jsonStr = LZString.decompressFromEncodedURIComponent(encodedData);
+                if (!jsonStr) {
+                    showError('Failed to decompress lesson data.');
+                    return;
+                }
+                
+                const data = JSON.parse(jsonStr);
+                
+                // Reconstruct lesson
+                lessonData = {
+                    name: data.n || 'Shared Lesson',
+                    cards: (data.c || []).map((card, index) => ({
+                        id: index + 1,
+                        title: card.t || '',
+                        content: card.c || '',
+                        type: card.y || 'text'
+                    }))
+                };
+                
+                if (lessonData.cards.length === 0) {
+                    showError('This lesson has no cards.');
+                    return;
+                }
+                
+                renderLesson();
+                
+            } catch (error) {
+                console.error('Error loading lesson:', error);
+                showError('Failed to parse lesson data. The link may be corrupted.');
+            }
+        });
+        
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error').style.display = 'flex';
+        }
+        
+        function renderLesson() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            
+            // Set title
+            document.getElementById('lesson-title').textContent = lessonData.name;
+            document.getElementById('slideshow-title').textContent = lessonData.name;
+            document.title = lessonData.name + ' - ATLAS:Face';
+            
+            // Set card count
+            const cardCount = lessonData.cards.length;
+            document.getElementById('card-count').textContent = cardCount + ' card' + (cardCount !== 1 ? 's' : '');
+            
+            // Render cards
+            renderCards();
+            
+            // Render slide dots
+            renderSlideDots();
+            
+            // Initialize math rendering
+            setTimeout(() => {
+                if (typeof renderMathInElement !== 'undefined') {
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false},
+                            {left: '\\[', right: '\\]', display: true},
+                            {left: '\\(', right: '\\)', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                }
+            }, 100);
+        }
+        
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            container.className = currentView === 'grid' ? 'cards-grid' : 'cards-list';
+            
+            container.innerHTML = lessonData.cards.map((card, index) => `
+                <div class="card" onclick="toggleCard(this)" data-index="${index}">
+                    <div class="card-header">
+                        <span class="card-number">${index + 1}</span>
+                        <span class="card-title">${escapeHtml(card.title) || 'Card ' + (index + 1)}</span>
+                        <span class="card-expand-icon">▼</span>
+                    </div>
+                    <div class="card-content">${renderContent(card.content)}</div>
+                    <div class="expand-hint">
+                        <span>↓</span> Click to expand
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderSlideDots() {
+            const dotsContainer = document.getElementById('slide-dots');
+            if (lessonData.cards.length <= 20) {
+                dotsContainer.innerHTML = lessonData.cards.map((_, index) => `
+                    <div class="slide-dot ${index === 0 ? 'active' : ''}" 
+                         onclick="goToSlide(${index})" 
+                         title="Card ${index + 1}"></div>
+                `).join('');
+            } else {
+                dotsContainer.innerHTML = '';
+            }
+        }
+        
+        function renderContent(content) {
+            if (!content) return '<em style="color: var(--text-muted);">No content</em>';
+            
+            // Check if content is already HTML
+            if (/<[a-z][\s\S]*>/i.test(content)) {
+                return content;
+            }
+            
+            // Use marked for markdown
+            if (typeof marked !== 'undefined') {
+                try {
+                    return marked.parse(content);
+                } catch (e) {
+                    console.warn('Markdown parsing failed:', e);
+                }
+            }
+            
+            // Basic fallback: convert newlines to <br>
+            return content
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\n/g, '<br>');
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        
+        function toggleCard(cardEl) {
+            cardEl.classList.toggle('expanded');
+        }
+        
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+            renderCards();
+        }
+        
+        // Slideshow functions
+        function startSlideshow() {
+            currentSlide = 0;
+            document.getElementById('slideshow').classList.add('active');
+            showSlide(currentSlide);
+            document.addEventListener('keydown', handleKeyPress);
+        }
+        
+        function closeSlideshow() {
+            document.getElementById('slideshow').classList.remove('active');
+            document.removeEventListener('keydown', handleKeyPress);
+        }
+        
+        function showSlide(index) {
+            const card = lessonData.cards[index];
+            const slideContent = document.getElementById('slide-content');
+            
+            slideContent.innerHTML = `
+                <h1>${escapeHtml(card.title) || 'Card ' + (index + 1)}</h1>
+                <div class="content-body">${renderContent(card.content)}</div>
+            `;
+            
+            // Update counter
+            document.getElementById('slide-counter').textContent = (index + 1) + ' / ' + lessonData.cards.length;
+            
+            // Update progress bar
+            const progress = ((index + 1) / lessonData.cards.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === lessonData.cards.length - 1;
+            
+            // Update dots
+            document.querySelectorAll('.slide-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            
+            // Re-render math
+            if (typeof renderMathInElement !== 'undefined') {
+                setTimeout(() => {
+                    renderMathInElement(slideContent, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                }, 50);
+            }
+        }
+        
+        function nextSlide() {
+            if (currentSlide < lessonData.cards.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function goToSlide(index) {
+            if (index >= 0 && index < lessonData.cards.length) {
+                currentSlide = index;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function handleKeyPress(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Escape') {
+                closeSlideshow();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSlide(lessonData.cards.length - 1);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+    "id": "codegym",
+    "name": "CodeGym",
+    "description": "AI-generated progressive coding labs for implementing research papers, ML algorithms, and technical topics one reveal at a time.",
+    "version": "1.1.0",
+    "author": "Resistance Labs",
+    "repository": "https://github.com/Resistance-Labs-Tech/atlasface-plugins",
+    "category": "lesson",
+    "icon": "fa-code",
+    "featureIds": [
+        "codeGym"
+    ],
+    "permissions": [
+        "app:read",
+        "cards:write",
+        "ui:sidebar",
+        "ui:toolbar",
+        "commands:register",
+        "keybinds:register",
+        "storage:local",
+        "network:fetch",
+        "ai:use",
+        "ipc:limited"
+    ],
+    "minAppVersion": "0.2.0",
+    "dependencies": [],
+    "tags": [
+        "coding",
+        "research-papers",
+        "machine-learning",
+        "algorithms",
+        "progressive-learning"
+    ]
+}
